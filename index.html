@@ -258,8 +258,9 @@
     function updateTime() {
       if (modeSelect.value === "time") {
         const timeMessage = "☆現在の時刻は: " + new Date().toLocaleTimeString() + "です　本日もご利用いただきありがとうございます（？）☆";
-        textElem.textContent = timeMessage;
-        x = frameWidth; // 時刻更新時にはスクロール位置をリセット
+        if (textElem.textContent !== timeMessage) {
+          textElem.textContent = timeMessage;
+        }
       }
     }
 
@@ -345,3 +346,4 @@
   </script>
 </body>
 </html>
+
