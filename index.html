@@ -183,9 +183,9 @@
     const updateBtn = document.getElementById("update-btn");
 
     let x = frameWidth;
-    let scrollSpeed = 3; // スクロール速度（少し遅く設定）
+    let scrollSpeed = 3;
     let animationFrameId;
-    let lastMessage = ""; // 最後に表示したメッセージを記録
+    let lastMessage = "";
 
     // 車内アナウンスのメッセージリスト（80個）
     const announcements = [
@@ -254,7 +254,7 @@
       "次は、茨城、茨茨です。",
     ];
 
-    // 時刻の表示を更新する関数
+    // 時刻更新
     function updateTime() {
       if (modeSelect.value === "time") {
         const timeMessage = "☆現在の時刻は: " + new Date().toLocaleTimeString() + "です　本日もご利用いただきありがとうございます（？）☆";
