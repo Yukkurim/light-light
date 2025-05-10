@@ -185,6 +185,7 @@
     let x = frameWidth;
     let scrollSpeed = 3; // スクロール速度（少し遅く設定）
     let animationFrameId;
+    let lastMessage = ""; // 最後に表示したメッセージを記録
 
     // 車内アナウンスのメッセージリスト（80個）
     const announcements = [
@@ -250,24 +251,17 @@
       "停車中にお立ちになると危険です。",
       "次は、岐阜、岐阜です。",
       "車内に異常が発生した場合は、すぐに車掌にお知らせください。",
-      "次は、茨城、茨城です。",
-      "本日の運行は、通常通り運行しています。",
-      "次は、岡山、岡山です。",
-      "次は、山梨、山梨です。",
-      "車内では足元にご注意ください。",
-      "次は、宮城、宮城です。",
-      "お急ぎのお客様は、他の列車をご利用ください。",
-      "次は、和歌山、和歌山です。",
-      "車内では、携帯電話をマナーモードに設定してください。",
-      "次は、沖縄、沖縄です。",
-      "車内の温度にご注意ください。",
-      "次は、秋田、秋田です。",
-      "降車口は、左側です。",
-      "次は、茨城、茨城です。",
-      "車内では、携帯電話をマナーモードに設定してください。",
-      "次は、沖縄、沖縄です。",
-      "次は、福島、福島です。",
+      "次は、茨城、茨茨です。",
     ];
+
+    // 時刻の表示を更新する関数
+    function updateTime() {
+      if (modeSelect.value === "time") {
+        const timeMessage = "☆現在の時刻は: " + new Date().toLocaleTimeString() + "です　本日もご利用いただきありがとうございます（？）☆";
+        textElem.textContent = timeMessage;
+        x = frameWidth; // 時刻更新時にはスクロール位置をリセット
+      }
+    }
 
     // 車内アナウンスのメッセージをランダムで取得
     function getRandomAnnouncement() {
@@ -287,11 +281,13 @@
       return fortunes[randomIndex];
     }
 
+    // モードに合わせたメッセージを取得
     function getMessage() {
       const mode = modeSelect.value;
       switch (mode) {
         case "time":
-          return "☆現在の時刻は: " + new Date().toLocaleTimeString() + "です　本日もご利用いただきありがとうございます（？）☆";
+          updateTime(); // 時刻更新
+          return; // メッセージは手動で更新
         case "announcement":
           return "☆" + getRandomAnnouncement() + "☆";
         case "fortune":
@@ -300,19 +296,6 @@
         default:
           return customInput.value || "☆メッセージを入力してください☆";
       }
-    }
-
-    // 文字色の変更
-    function updateTextColor() {
-      const color = colorSelect.value;
-      textElem.style.color = color;
-    }
-
-    // メッセージを更新
-    function updateMessage() {
-      textElem.textContent = getMessage();
-      x = frameWidth;  // 更新時に位置をリセット
-      moveText();  // スクロールを再開
     }
 
     // メッセージをスクロールさせる関数
@@ -328,6 +311,22 @@
       animationFrameId = requestAnimationFrame(moveText);
     }
 
+    // 文字色の変更
+    function updateTextColor() {
+      const color = colorSelect.value;
+      textElem.style.color = color;
+    }
+
+    // メッセージを更新
+    function updateMessage() {
+      const newMessage = getMessage();
+      if (newMessage !== lastMessage) {  // メッセージが変更された場合のみ更新
+        lastMessage = newMessage;
+        textElem.textContent = newMessage;
+        x = frameWidth;  // 更新時に位置をリセット
+      }
+    }
+
     // 初期表示ではメッセージを更新しない
     moveText();  // 初期メッセージのスクロールを開始
 
@@ -336,6 +335,12 @@
 
     // モード選択変更時にも更新
     modeSelect.addEventListener("change", updateMessage);
+
+    // 色選択が変更された場合に色を更新
+    colorSelect.addEventListener("change", updateTextColor);
+
+    // 時刻の更新を1秒ごとに実行
+    setInterval(updateTime, 1000);
 
   </script>
 </body>
