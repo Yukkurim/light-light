@@ -186,6 +186,7 @@
     let scrollSpeed = 3;
     let animationFrameId;
     let lastMessage = "";
+    let scrollPosition = x; // スクロールの位置を保持
 
     // 車内アナウンスのメッセージリスト（80個）
     const announcements = [
@@ -301,10 +302,10 @@
 
     // メッセージをスクロールさせる関数
     function moveText() {
-      textElem.style.left = x + "px";
-      x -= scrollSpeed;  // 速度は常に一定
-      if (x < -textElem.offsetWidth) {
-        x = frameWidth;  // 画面外に出たらリセット
+      textElem.style.left = scrollPosition + "px";
+      scrollPosition -= scrollSpeed;  // 速度は常に一定
+      if (scrollPosition < -textElem.offsetWidth) {
+        scrollPosition = frameWidth;  // 画面外に出たらリセット
         if (modeSelect.value === "announcement") {
           updateMessage();  // 車内アナウンスのメッセージをランダムに更新
         }
@@ -324,7 +325,7 @@
       if (newMessage !== lastMessage) {  // メッセージが変更された場合のみ更新
         lastMessage = newMessage;
         textElem.textContent = newMessage;
-        x = frameWidth;  // 更新時に位置をリセット
+        scrollPosition = frameWidth;  // 更新時に位置をリセット
       }
     }
 
@@ -346,4 +347,3 @@
   </script>
 </body>
 </html>
-
