@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <title>電光掲示板</title>
   <style>
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       background-color: #111;
@@ -13,6 +15,7 @@
       height: 100%;
       overflow: hidden;
     }
+
     #main-container {
       display: flex;
       flex-direction: column;
@@ -23,6 +26,7 @@
       padding: 20px;
       box-sizing: border-box;
     }
+
     #frame {
       margin: 0;
       width: 100%;
@@ -32,6 +36,7 @@
       overflow: hidden;
       border-right: 2px solid #555;
     }
+
     #scroll-text {
       position: absolute;
       white-space: nowrap;
@@ -39,6 +44,7 @@
       color: lime;
       top: 40px;
     }
+
     #control-panel {
       padding: 20px;
       background: #222;
@@ -46,15 +52,22 @@
       box-sizing: border-box;
       margin-top: 20px;
     }
-    label, select, input, button {
+
+    label,
+    select,
+    input,
+    button {
       display: block;
       width: 100%;
       margin-bottom: 15px;
       font-size: 18px;
     }
-    input, select {
+
+    input,
+    select {
       height: 40px;
     }
+
     button {
       background-color: #555;
       color: white;
@@ -63,6 +76,7 @@
       cursor: pointer;
       font-size: 18px;
     }
+
     footer {
       height: 30px;
       background-color: #000;
@@ -74,156 +88,268 @@
       border-top: 1px solid #444;
       width: 100%;
     }
+
+    #description {
+      font-size: 18px;
+      color: #fff;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .extra-content {
+      margin-top: 30px;
+      font-size: 18px;
+      color: #fff;
+    }
+
+    .extra-content h3 {
+      margin-bottom: 10px;
+    }
+
+    .extra-content p {
+      margin: 5px 0;
+    }
+
+    #github-link {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    #github-link a {
+      color: #fff;
+      font-size: 20px;
+      padding: 15px 30px;
+      background-color: #4CAF50;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    #github-link a:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
+
 <body>
+  <div id="main-container">
+    <div id="frame">
+      <div id="scroll-text">☆電光掲示板へようこそ！まずは設定をしてみて下さい！作者のYoutubeチャンネルは下のボタンから☆</div>
+    </div>
+    <div id="control-panel">
+      <label for="mode-select">表示モード:</label>
+      <select id="mode-select">
+        <option value="custom">カスタムメッセージ</option>
+        <option value="time">現在の時刻</option>
+        <option value="announcement">車内アナウンス</option>
+        <option value="fortune">占い</option>
+      </select>
 
-<div id="main-container">
-  <div id="frame">
-    <div id="scroll-text">☆電光掲示板へようこそ！まずは設定をしてみて下さい！☆</div>
-  </div>
+      <div id="custom-input-group">
+        <label for="custom-input">カスタムメッセージ:</label>
+        <input type="text" id="custom-input" value="☆電光掲示板へようこそ！☆">
+      </div>
 
-  <div id="control-panel">
-    <label for="mode-select">表示モード:</label>
-    <select id="mode-select">
-      <option value="custom">カスタムメッセージ</option>
-      <option value="time">現在の時刻</option>
-      <option value="announcement">車内アナウンス</option>
-      <option value="fortune">占い</option>
-    </select>
+      <label for="color-select">文字色:</label>
+      <select id="color-select">
+        <option value="lime">ライム</option>
+        <option value="white">白</option>
+        <option value="yellow">黄</option>
+        <option value="red">赤</option>
+        <option value="cyan">シアン</option>
+      </select>
 
-    <div id="custom-input-group">
-      <label for="custom-input">カスタムメッセージ:</label>
-      <input type="text" id="custom-input" value="☆電光掲示板へようこそ！☆">
+      <button id="update-btn">メッセージ更新</button>
     </div>
 
-    <label for="color-select">文字色:</label>
-    <select id="color-select">
-      <option value="lime">ライム</option>
-      <option value="white">白</option>
-      <option value="yellow">黄</option>
-      <option value="red">赤</option>
-      <option value="cyan">シアン</option>
-    </select>
-    
-    <button id="update-btn">メッセージ更新</button>
+    <div id="description">
+      <p>この電光掲示板は、カスタムメッセージ、現在の時刻、車内アナウンスのメッセージ（ランダム表示）や、面白い占い結果を表示します。あなたの好みに合わせて設定を変更し、楽しいメッセージをスクロール表示してみましょう！</p>
+    </div>
+
+    <div class="extra-content">
+      <h3>設定できるモード:</h3>
+      <p><strong>占い:</strong> あなたの運勢を占ってみましょう！ランダムな結果を表示します。</p>
+      <p><strong>車内アナウンス:</strong> 車内のアナウンスのメッセージをランダムに表示します。</p>
+      <p><strong>現在の時刻:</strong> 時刻を表示することができます。</p>
+      <p><strong>カスタムメッセージ:</strong> 自分だけのメッセージを表示できます！</p>
+    </div>
+
+    <div id="github-link">
+      <a href="https://youtube.com/channel/UCqzUSsyLcp8Bo6sDrvQM1gw?si=HIo5I_ecyP_Ygqfv" target="_blank">YouTube チャンネルを訪れる</a>
+    </div>
   </div>
-</div>
 
-<footer>© ゆっくりーむ</footer>
+  <footer>© ゆっくりーむ</footer>
 
-<script>
-  const textElem = document.getElementById("scroll-text");
-  const frame = document.getElementById("frame");
-  const frameWidth = frame.offsetWidth;
-  const modeSelect = document.getElementById("mode-select");
-  const customInput = document.getElementById("custom-input");
-  const colorSelect = document.getElementById("color-select");
-  const updateBtn = document.getElementById("update-btn");
+  <script>
+    const textElem = document.getElementById("scroll-text");
+    const frameWidth = document.getElementById("frame").offsetWidth;
+    const modeSelect = document.getElementById("mode-select");
+    const customInput = document.getElementById("custom-input");
+    const colorSelect = document.getElementById("color-select");
+    const updateBtn = document.getElementById("update-btn");
 
-  let x = frameWidth;
-  let scrollSpeed = 2.5;
-  let animationFrameId;
-  let nextMessage = null;
+    let x = frameWidth;
+    let scrollSpeed = 3; // スクロール速度（少し遅く設定）
+    let animationFrameId;
 
-  const announcements = [
-    "次は、渋谷、渋谷です。",
-    "お出口は左側です。",
-    "ご乗車ありがとうございます。",
-    "この電車は快速列車です。",
-    "前のドアを開けます。",
-    "終点は、名古屋、名古屋です。",
-    "立ち上がらないでください。",
-    "全席指定席です。",
-    "車内は禁煙です。",
-    "ドアが閉まりますのでご注意ください。",
-    "車内の音声案内をお聞きください。",
-    "お乗り換えは、東京駅です。",
-    "車内の照明が暗くなります。",
-    "降車される際は、お手回り品をお忘れなく。",
-    "お手洗いは次の車両にございます。",
-    "列車は、通常運行しています。",
-    "お持ちの切符をご確認ください。",
-    "駅に到着後、しばらく停車いたします。",
-    "お忘れ物がないようご確認ください。",
-    "車内では、大きな音を出さないようお願いします。",
-    "お手回り品の管理をお願いします。",
-    "車内での飲食はご遠慮ください。",
-    "急停車の際は、手すりにつかまってください。",
-    "この電車は、終点まで直通です。",
-    "車両のドアが開きますので、ご注意ください。",
-    "終点は、京都、京都です。",
-    "車内の案内が聞こえます。",
-    "この電車は、各駅停車です。",
-    "お疲れ様でした。",
-    "停車中にお立ちになると危険です。",
-    "車内に異常が発生した場合は、すぐに車掌にお知らせください。",
-    "車内では足元にご注意ください。",
-    "お急ぎのお客様は、他の列車をご利用ください。",
-    "車内では、携帯電話をマナーモードに設定してください。",
-    "車内の温度にご注意ください。",
-    "降車口は、左側です。",
-  ];
-
-  function getRandomAnnouncement() {
-    return announcements[Math.floor(Math.random() * announcements.length)];
-  }
-
-  function getFortune() {
-    const fortunes = [
-      "大吉: 今日は何をしてもうまくいく日です。",
-      "中吉: 波乱があっても乗り越えられるでしょう。",
-      "小吉: 小さな幸運があるかも。",
-      "凶: 無理せず休んでね。",
+    // 車内アナウンスのメッセージリスト（80個）
+    const announcements = [
+      "次は、渋谷、渋谷です。",
+      "お出口は左側です。",
+      "次は、新宿、新宿です。",
+      "ご乗車ありがとうございます。",
+      "到着駅は、東京、東京です。",
+      "この電車は快速列車です。",
+      "お手荷物にご注意ください。",
+      "前のドアを開けます。",
+      "次は、大阪、大阪です。",
+      "終点は、名古屋、名古屋です。",
+      "立ち上がらないでください。",
+      "次は、池袋、池袋です。",
+      "全席指定席です。",
+      "車内は禁煙です。",
+      "ドアが閉まりますのでご注意ください。",
+      "次は、横浜、横浜です。",
+      "車内の音声案内をお聞きください。",
+      "次は、千葉、千葉です。",
+      "お乗り換えは、東京駅です。",
+      "終点は、福岡、福岡です。",
+      "次は、京都、京都です。",
+      "車内の照明が暗くなります。",
+      "車内にご用のある方は、車掌にお知らせください。",
+      "降車される際は、お手回り品をお忘れなく。",
+      "お手洗いは次の車両にございます。",
+      "次は、札幌、札幌です。",
+      "列車は、通常運行しています。",
+      "次は、広島、広島です。",
+      "お持ちの切符をご確認ください。",
+      "終点は、仙台、仙台です。",
+      "次は、渋谷、渋谷です。",
+      "この電車は通勤快速です。",
+      "次は、大阪、大阪です。",
+      "本日もご利用いただき、ありがとうございます。",
+      "次は、長野、長野です。",
+      "ドアが開きますのでご注意ください。",
+      "次は、名古屋、名古屋です。",
+      "駅に到着後、しばらく停車いたします。",
+      "お忘れ物がないようご確認ください。",
+      "次は、福岡、福岡です。",
+      "車内では、大きな音を出さないようお願いします。",
+      "お手回り品の管理をお願いします。",
+      "次は、神戸、神戸です。",
+      "お乗り換えは、新宿駅です。",
+      "車内での飲食はご遠慮ください。",
+      "次は、福井、福井です。",
+      "急停車の際は、手すりにつかまってください。",
+      "この電車は、終点まで直通です。",
+      "次は、静岡、静岡です。",
+      "車両のドアが開きますので、ご注意ください。",
+      "本日の運行は、通常通りです。",
+      "終点は、京都、京都です。",
+      "次は、愛知、愛知です。",
+      "車内の案内が聞こえます。",
+      "次は、青森、青森です。",
+      "この電車は、各駅停車です。",
+      "次は、奈良、奈良です。",
+      "お疲れ様でした。",
+      "次は、金沢、金沢です。",
+      "停車中にお立ちになると危険です。",
+      "次は、岐阜、岐阜です。",
+      "車内に異常が発生した場合は、すぐに車掌にお知らせください。",
+      "次は、茨城、茨城です。",
+      "本日の運行は、通常通り運行しています。",
+      "次は、岡山、岡山です。",
+      "次は、山梨、山梨です。",
+      "車内では足元にご注意ください。",
+      "次は、宮城、宮城です。",
+      "お急ぎのお客様は、他の列車をご利用ください。",
+      "次は、和歌山、和歌山です。",
+      "車内では、携帯電話をマナーモードに設定してください。",
+      "次は、沖縄、沖縄です。",
+      "車内の温度にご注意ください。",
+      "次は、秋田、秋田です。",
+      "降車口は、左側です。",
+      "次は、茨城、茨城です。",
+      "車内では、携帯電話をマナーモードに設定してください。",
+      "次は、沖縄、沖縄です。",
+      "次は、福島、福島です。",
     ];
-    return fortunes[Math.floor(Math.random() * fortunes.length)];
-  }
 
-  function getMessage() {
-    const mode = modeSelect.value;
-    switch (mode) {
-      case "time":
-        return "☆現在の時刻は: " + new Date().toLocaleTimeString() + "です☆";
-      case "announcement":
-        return "☆" + getRandomAnnouncement() + "☆";
-      case "fortune":
-        return "☆占い結果は: " + getFortune() + "☆";
-      case "custom":
-      default:
-        return customInput.value || "☆メッセージを入力してください☆";
+    // 車内アナウンスのメッセージをランダムで取得
+    function getRandomAnnouncement() {
+      const randomIndex = Math.floor(Math.random() * announcements.length);
+      return announcements[randomIndex];
     }
-  }
 
-  function updateTextColor() {
-    textElem.style.color = colorSelect.value;
-  }
+    // 占い結果をランダムに生成
+    function getFortune() {
+      const fortunes = [
+        "大吉: 今日は何をしてもうまくいく日です。",
+        "中吉: 多少の波乱があるかもしれませんが、乗り越えられるでしょう。",
+        "小吉: 穏やかな日ですが、ちょっとした喜びがありそうです。",
+        "凶: あまり無理をしない方が良さそうです。休養が大事。",
+      ];
+      const randomIndex = Math.floor(Math.random() * fortunes.length);
+      return fortunes[randomIndex];
+    }
 
-  function requestMessageUpdate() {
-    nextMessage = getMessage();
-    updateTextColor();
-  }
-
-  function moveText() {
-    textElem.style.left = x + "px";
-    x -= scrollSpeed;
-
-    if (x < -textElem.offsetWidth) {
-      x = frame.offsetWidth;
-
-      if (nextMessage !== null) {
-        textElem.textContent = nextMessage;
-        nextMessage = null;
+    function getMessage() {
+      const mode = modeSelect.value;
+      switch (mode) {
+        case "time":
+          return "☆現在の時刻は: " + new Date().toLocaleTimeString() + "です　本日もご利用いただきありがとうございます（？）☆";
+        case "announcement":
+          return "☆" + getRandomAnnouncement() + "☆";
+        case "fortune":
+          return "☆占い結果は: " + getFortune() + "です　いい日になるといいね！☆";
+        case "custom":
+        default:
+          return customInput.value || "☆メッセージを入力してください☆";
       }
     }
 
-    animationFrameId = requestAnimationFrame(moveText);
-  }
+    // 文字色の変更
+    function updateTextColor() {
+      const color = colorSelect.value;
+      textElem.style.color = color;
+    }
 
-  updateTextColor();
-  moveText();
+    // メッセージを更新
+    function updateMessage() {
+      textElem.textContent = getMessage();
+      x = frameWidth; // 更新時に位置をリセット
+      moveText(); // スクロールを再開
+    }
 
-  updateBtn.addEventListener("click", requestMessageUpdate);
-</script>
+    // メッセージをスクロールさせる関数
+    function moveText() {
+      textElem.style.left = x + "px";
+      x -= scrollSpeed; // 速度は常に一定
+      if (x < -textElem.offsetWidth) {
+        x = frameWidth; // 画面外に出たらリセット
+        if (modeSelect.value === "announcement") {
+          updateMessage(); // 車内アナウンスが完全に隠れたら新しいメッセージに更新
+        }
+      }
+      animationFrameId = requestAnimationFrame(moveText);
+    }
+
+    // 初期表示ではメッセージを更新しない
+    moveText(); // 初期メッセージのスクロールを開始
+
+    // ボタンが押されたときにのみ更新
+    updateBtn.addEventListener("click", updateMessage);
+
+    // 時刻を常に更新
+    setInterval(() => {
+      if (modeSelect.value === "time") {
+        updateMessage();
+      }
+    }, 1000); // 1秒ごとに時刻を更新
+
+  </script>
 
 </body>
+
 </html>
+
