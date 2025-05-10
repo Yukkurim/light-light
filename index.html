@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
   <meta charset="UTF-8">
   <title>電光掲示板</title>
   <style>
-    html,
-    body {
+    html, body {
       margin: 0;
       padding: 0;
       background-color: #111;
@@ -53,18 +51,14 @@
       margin-top: 20px;
     }
 
-    label,
-    select,
-    input,
-    button {
+    label, select, input, button {
       display: block;
       width: 100%;
       margin-bottom: 15px;
       font-size: 18px;
     }
 
-    input,
-    select {
+    input, select {
       height: 40px;
     }
 
@@ -129,12 +123,12 @@
     }
   </style>
 </head>
-
 <body>
   <div id="main-container">
     <div id="frame">
       <div id="scroll-text">☆電光掲示板へようこそ！まずは設定をしてみて下さい！作者のYoutubeチャンネルは下のボタンから☆</div>
     </div>
+
     <div id="control-panel">
       <label for="mode-select">表示モード:</label>
       <select id="mode-select">
@@ -317,39 +311,32 @@
     // メッセージを更新
     function updateMessage() {
       textElem.textContent = getMessage();
-      x = frameWidth; // 更新時に位置をリセット
-      moveText(); // スクロールを再開
+      x = frameWidth;  // 更新時に位置をリセット
+      moveText();  // スクロールを再開
     }
 
     // メッセージをスクロールさせる関数
     function moveText() {
       textElem.style.left = x + "px";
-      x -= scrollSpeed; // 速度は常に一定
+      x -= scrollSpeed;  // 速度は常に一定
       if (x < -textElem.offsetWidth) {
-        x = frameWidth; // 画面外に出たらリセット
+        x = frameWidth;  // 画面外に出たらリセット
         if (modeSelect.value === "announcement") {
-          updateMessage(); // 車内アナウンスが完全に隠れたら新しいメッセージに更新
+          updateMessage();  // 車内アナウンスのメッセージをランダムに更新
         }
       }
       animationFrameId = requestAnimationFrame(moveText);
     }
 
     // 初期表示ではメッセージを更新しない
-    moveText(); // 初期メッセージのスクロールを開始
+    moveText();  // 初期メッセージのスクロールを開始
 
     // ボタンが押されたときにのみ更新
     updateBtn.addEventListener("click", updateMessage);
 
-    // 時刻を常に更新
-    setInterval(() => {
-      if (modeSelect.value === "time") {
-        updateMessage();
-      }
-    }, 1000); // 1秒ごとに時刻を更新
+    // モード選択変更時にも更新
+    modeSelect.addEventListener("change", updateMessage);
 
   </script>
-
 </body>
-
 </html>
-
