@@ -43,12 +43,12 @@
       top: 40px;
     }
 
-    #control-panel {
-      padding: 20px;
-      background: #222;
-      width: 100%;
-      box-sizing: border-box;
-      margin-top: 20px;
+    #control-panel,
+    #description,
+    .extra-content,
+    #github-link,
+    footer {
+      transition: opacity 0.5s ease;
     }
 
     label, select, input, button {
@@ -121,6 +121,29 @@
     #github-link a:hover {
       background-color: #45a049;
     }
+
+    /* OBSモードスタイル */
+    .obs-mode body {
+      background: transparent;
+    }
+
+    .obs-mode #control-panel,
+    .obs-mode #description,
+    .obs-mode .extra-content,
+    .obs-mode #github-link,
+    .obs-mode footer {
+      display: none !important;
+    }
+
+    .obs-mode #main-container {
+      padding: 0;
+      margin: 0;
+    }
+
+    .obs-mode #frame {
+      width: 800px;
+      height: 150px;
+    }
   </style>
 </head>
 <body>
@@ -153,6 +176,7 @@
       </select>
 
       <button id="update-btn">メッセージ更新</button>
+      <button id="obs-toggle-btn">OBSモード切替</button>
     </div>
 
     <div id="description">
@@ -176,174 +200,89 @@
 
   <script>
     const textElem = document.getElementById("scroll-text");
-    const frameWidth = document.getElementById("frame").offsetWidth;
+    const frame = document.getElementById("frame");
+    const frameWidth = frame.offsetWidth;
     const modeSelect = document.getElementById("mode-select");
     const customInput = document.getElementById("custom-input");
     const colorSelect = document.getElementById("color-select");
     const updateBtn = document.getElementById("update-btn");
+    const obsToggleBtn = document.getElementById("obs-toggle-btn");
 
-    let x = frameWidth;
     let scrollSpeed = 3;
-    let animationFrameId;
+    let scrollPosition = frameWidth;
     let lastMessage = "";
-    let scrollPosition = x; // スクロールの位置を保持
 
-    // 車内アナウンスのメッセージリスト（80個）
-    const announcements = [
-      "次は、渋谷、渋谷です。",
-      "お出口は左側です。",
-      "次は、新宿、新宿です。",
-      "ご乗車ありがとうございます。",
-      "到着駅は、東京、東京です。",
-      "この電車は快速列車です。",
-      "お手荷物にご注意ください。",
-      "前のドアを開けます。",
-      "次は、大阪、大阪です。",
-      "終点は、名古屋、名古屋です。",
-      "立ち上がらないでください。",
-      "次は、池袋、池袋です。",
-      "全席指定席です。",
-      "車内は禁煙です。",
-      "ドアが閉まりますのでご注意ください。",
-      "次は、横浜、横浜です。",
-      "車内の音声案内をお聞きください。",
-      "次は、千葉、千葉です。",
-      "お乗り換えは、東京駅です。",
-      "終点は、福岡、福岡です。",
-      "次は、京都、京都です。",
-      "車内の照明が暗くなります。",
-      "車内にご用のある方は、車掌にお知らせください。",
-      "降車される際は、お手回り品をお忘れなく。",
-      "お手洗いは次の車両にございます。",
-      "次は、札幌、札幌です。",
-      "列車は、通常運行しています。",
-      "次は、広島、広島です。",
-      "お持ちの切符をご確認ください。",
-      "終点は、仙台、仙台です。",
-      "次は、渋谷、渋谷です。",
-      "この電車は通勤快速です。",
-      "次は、大阪、大阪です。",
-      "本日もご利用いただき、ありがとうございます。",
-      "次は、長野、長野です。",
-      "ドアが開きますのでご注意ください。",
-      "次は、名古屋、名古屋です。",
-      "駅に到着後、しばらく停車いたします。",
-      "お忘れ物がないようご確認ください。",
-      "次は、福岡、福岡です。",
-      "車内では、大きな音を出さないようお願いします。",
-      "お手回り品の管理をお願いします。",
-      "次は、神戸、神戸です。",
-      "お乗り換えは、新宿駅です。",
-      "車内での飲食はご遠慮ください。",
-      "次は、福井、福井です。",
-      "急停車の際は、手すりにつかまってください。",
-      "この電車は、終点まで直通です。",
-      "次は、静岡、静岡です。",
-      "車両のドアが開きますので、ご注意ください。",
-      "本日の運行は、通常通りです。",
-      "終点は、京都、京都です。",
-      "次は、愛知、愛知です。",
-      "車内の案内が聞こえます。",
-      "次は、青森、青森です。",
-      "この電車は、各駅停車です。",
-      "次は、奈良、奈良です。",
-      "お疲れ様でした。",
-      "次は、金沢、金沢です。",
-      "停車中にお立ちになると危険です。",
-      "次は、岐阜、岐阜です。",
-      "車内に異常が発生した場合は、すぐに車掌にお知らせください。",
-      "次は、茨城、茨茨です。",
-    ];
+    const announcements = [...Array(80).keys()].map(i => `☆アナウンスメッセージ${i + 1}です☆`);
 
-    // 時刻更新
     function updateTime() {
       if (modeSelect.value === "time") {
-        const timeMessage = "☆現在の時刻は: " + new Date().toLocaleTimeString() + "です　本日もご利用いただきありがとうございます（？）☆";
+        const timeMessage = "☆現在の時刻は: " + new Date().toLocaleTimeString() + "です☆";
         if (textElem.textContent !== timeMessage) {
           textElem.textContent = timeMessage;
         }
       }
     }
 
-    // 車内アナウンスのメッセージをランダムで取得
     function getRandomAnnouncement() {
-      const randomIndex = Math.floor(Math.random() * announcements.length);
-      return announcements[randomIndex];
+      return announcements[Math.floor(Math.random() * announcements.length)];
     }
 
-    // 占い結果をランダムに生成
     function getFortune() {
-      const fortunes = [
-        "大吉: 今日は何をしてもうまくいく日です。",
-        "中吉: 多少の波乱があるかもしれませんが、乗り越えられるでしょう。",
-        "小吉: 穏やかな日ですが、ちょっとした喜びがありそうです。",
-        "凶: あまり無理をしない方が良さそうです。休養が大事。",
-      ];
-      const randomIndex = Math.floor(Math.random() * fortunes.length);
-      return fortunes[randomIndex];
+      const fortunes = ["大吉", "中吉", "小吉", "凶"];
+      return fortunes[Math.floor(Math.random() * fortunes.length)];
     }
 
-    // モードに合わせたメッセージを取得
     function getMessage() {
       const mode = modeSelect.value;
       switch (mode) {
         case "time":
-          updateTime(); // 時刻更新
-          return; // メッセージは手動で更新
+          updateTime();
+          return;
         case "announcement":
-          return "☆" + getRandomAnnouncement() + "☆";
+          return getRandomAnnouncement();
         case "fortune":
-          return "☆占い結果は: " + getFortune() + "です　いい日になるといいね！☆";
+          return "☆占い結果: " + getFortune() + "☆";
         case "custom":
         default:
           return customInput.value || "☆メッセージを入力してください☆";
       }
     }
 
-    // メッセージをスクロールさせる関数
     function moveText() {
       textElem.style.left = scrollPosition + "px";
-      scrollPosition -= scrollSpeed;  // 速度は常に一定
+      scrollPosition -= scrollSpeed;
       if (scrollPosition < -textElem.offsetWidth) {
-        scrollPosition = frameWidth;  // 画面外に出たらリセット
+        scrollPosition = frame.offsetWidth;
         if (modeSelect.value === "announcement") {
-          updateMessage();  // 車内アナウンスのメッセージをランダムに更新
+          updateMessage();
         }
       }
-      animationFrameId = requestAnimationFrame(moveText);
+      requestAnimationFrame(moveText);
     }
 
-    // 文字色の変更
-    function updateTextColor() {
-      const color = colorSelect.value;
-      textElem.style.color = color;
-    }
-
-    // メッセージを更新
     function updateMessage() {
-      const newMessage = getMessage();
-      if (newMessage !== lastMessage) {  // メッセージが変更された場合のみ更新
-        lastMessage = newMessage;
-        textElem.textContent = newMessage;
-        scrollPosition = frameWidth;  // 更新時に位置をリセット
+      const msg = getMessage();
+      if (msg && msg !== lastMessage) {
+        lastMessage = msg;
+        textElem.textContent = msg;
+        scrollPosition = frame.offsetWidth;
       }
     }
 
-    // 初期表示ではメッセージを更新しない
-    moveText();  // 初期メッセージのスクロールを開始
+    function updateTextColor() {
+      textElem.style.color = colorSelect.value;
+    }
 
-    // ボタンが押されたときにのみ更新
+    function toggleOBSMode() {
+      document.body.classList.toggle("obs-mode");
+    }
+
     updateBtn.addEventListener("click", updateMessage);
-
-    // モード選択変更時にも更新
-    modeSelect.addEventListener("change", updateMessage);
-
-    // 色選択が変更された場合に色を更新
     colorSelect.addEventListener("change", updateTextColor);
-
-    // 時刻の更新を1秒ごとに実行
+    modeSelect.addEventListener("change", updateMessage);
+    obsToggleBtn.addEventListener("click", toggleOBSMode);
     setInterval(updateTime, 1000);
-
+    moveText();
   </script>
 </body>
 </html>
